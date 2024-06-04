@@ -40,6 +40,18 @@ services:
       MYSQL_PORT: 3306
     ports:
       - "3380:3306"
+  database-mariadb11:
+    image: mariadb:11
+    container_name: "spatial-mariadb11"
+    restart: always
+    environment:
+      MYSQL_DATABASE: main
+      MYSQL_USER: main
+      MYSQL_PASSWORD: main
+      MYSQL_ROOT_PASSWORD: main
+      MYSQL_PORT: 3306
+    ports:
+      - "3411:3306"
   service_doc:
     container_name: "spatial-doc"
     build:

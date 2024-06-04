@@ -18,7 +18,7 @@ declare(strict_types=1);
 
 namespace LongitudeOne\Spatial\ORM\Query\AST\Functions\Standard;
 
-use Doctrine\DBAL\Platforms\MySQLPlatform;
+use Doctrine\DBAL\Platforms\AbstractMySQLPlatform;
 use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
 use LongitudeOne\Spatial\ORM\Query\AST\Functions\AbstractSpatialDQLFunction;
 
@@ -75,6 +75,6 @@ class StIsRing extends AbstractSpatialDQLFunction
     protected function getPlatforms(): array
     {
         // MySQL does not support this function
-        return [PostgreSQLPlatform::class, MySQLPlatform::class];
+        return [PostgreSQLPlatform::class,AbstractMySQLPlatform::class];
     }
 }

@@ -23,8 +23,8 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Logging;
+use Doctrine\DBAL\Platforms\AbstractMySQLPlatform;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\DBAL\Platforms\MySQLPlatform;
 use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
 use Doctrine\DBAL\Types\Exception\UnknownColumnType;
 use Doctrine\DBAL\Types\Type;
@@ -364,7 +364,7 @@ abstract class OrmTestCase extends SpatialTestCase
             return $connection;
         }
 
-        if ($connection->getDatabasePlatform() instanceof MySQLPlatform) {
+        if ($connection->getDatabasePlatform() instanceof AbstractMySQLPlatform) {
             return $connection;
         }
 
@@ -474,7 +474,7 @@ abstract class OrmTestCase extends SpatialTestCase
             $this->addSpecificPostgreSqlFunctions($configuration);
         }
 
-        if ($this->getPlatform() instanceof MySQLPlatform) {
+        if ($this->getPlatform() instanceof AbstractMySQLPlatform) {
             // Specific functions of MySQL 5.7 and 8.0 database engines
             $this->addSpecificMySqlFunctions($configuration);
         }

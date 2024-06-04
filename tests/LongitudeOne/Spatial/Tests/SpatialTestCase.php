@@ -18,7 +18,9 @@ declare(strict_types=1);
 
 namespace LongitudeOne\Spatial\Tests;
 
+use Doctrine\DBAL\Platforms\AbstractMySQLPlatform;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
+use Doctrine\DBAL\Platforms\MariaDBPlatform;
 use Doctrine\DBAL\Platforms\MySQL57Platform;
 use Doctrine\DBAL\Platforms\MySQL80Platform;
 use Doctrine\DBAL\Platforms\MySQLPlatform;
@@ -44,7 +46,7 @@ class SpatialTestCase extends TestCase
     protected static function assertBigPolygon($value, AbstractPlatform $platform): void
     {
         $expected = 'POLYGON((0 10,10 10,10 0,0 0,0 10))';
-        if ($platform instanceof MySQLPlatform) {
+        if ($platform instanceof AbstractMySQLPlatform) {
             // MySQL does not respect creation order of points composing a Polygon.
             $expected = 'POLYGON((0 10,0 0,10 0,10 10,0 10))';
         }
@@ -67,6 +69,11 @@ class SpatialTestCase extends TestCase
         if (self::platformIsMySql57($platform)) {
             // MySQL5 does not return the standard answer
             $expected = 'GEOMETRYCOLLECTION()';
+        }
+
+        if ($platform instanceof MariaDBPlatform) {
+            // MySQL8 does not return the standard answer
+            $expected = 'GEOMETRYCOLLECTION EMPTY';
         }
 
         if ($platform instanceof MySQL80Platform) {

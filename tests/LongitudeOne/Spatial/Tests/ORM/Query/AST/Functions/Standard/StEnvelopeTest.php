@@ -18,7 +18,7 @@ declare(strict_types=1);
 
 namespace LongitudeOne\Spatial\Tests\ORM\Query\AST\Functions\Standard;
 
-use Doctrine\DBAL\Platforms\MySQLPlatform;
+use Doctrine\DBAL\Platforms\AbstractMySQLPlatform;
 use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
 use LongitudeOne\Spatial\Tests\Helper\PersistantPolygonHelperTrait;
 use LongitudeOne\Spatial\Tests\PersistOrmTestCase;
@@ -47,7 +47,7 @@ class StEnvelopeTest extends PersistOrmTestCase
     {
         $this->usesEntity(self::POLYGON_ENTITY);
         $this->supportsPlatform(PostgreSQLPlatform::class);
-        $this->supportsPlatform(MySQLPlatform::class);
+        $this->supportsPlatform(AbstractMySQLPlatform::class);
 
         parent::setUp();
     }
@@ -70,7 +70,7 @@ class StEnvelopeTest extends PersistOrmTestCase
         $result = $query->getResult();
 
         $expected = 'POLYGON((0 0,0 10,10 10,10 0,0 0))';
-        if ($this->getPlatform() instanceof MySQLPlatform) {
+        if ($this->getPlatform() instanceof AbstractMySQLPlatform) {
             // polygon is equals, but different order
             $expected = 'POLYGON((0 0,10 0,10 10,0 10,0 0))';
         }
@@ -97,7 +97,7 @@ class StEnvelopeTest extends PersistOrmTestCase
         );
 
         $parameter = 'POLYGON((0 0,0 10,10 10,10 0,0 0))';
-        if ($this->getPlatform() instanceof MySQLPlatform) {
+        if ($this->getPlatform() instanceof AbstractMySQLPlatform) {
             // polygon is equals, but different order
             $parameter = 'POLYGON((0 0,10 0,10 10,0 10,0 0))';
         }

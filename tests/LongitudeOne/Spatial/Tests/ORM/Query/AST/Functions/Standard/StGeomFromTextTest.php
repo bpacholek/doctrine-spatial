@@ -18,7 +18,6 @@ declare(strict_types=1);
 
 namespace LongitudeOne\Spatial\Tests\ORM\Query\AST\Functions\Standard;
 
-use Doctrine\DBAL\Platforms\MySQLPlatform;
 use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
 use LongitudeOne\Spatial\Tests\Helper\PersistantLineStringHelperTrait;
 use LongitudeOne\Spatial\Tests\Helper\PersistantPointHelperTrait;
@@ -50,7 +49,8 @@ class StGeomFromTextTest extends PersistOrmTestCase
         $this->usesEntity(self::LINESTRING_ENTITY);
         $this->usesEntity(self::POINT_ENTITY);
         $this->supportsPlatform(PostgreSQLPlatform::class);
-        $this->supportsPlatform(MySQLPlatform::class);
+        $this->supportsPlatform(AbstractMySQLPlatform::class);
+
 
         parent::setUp();
     }

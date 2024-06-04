@@ -16,9 +16,10 @@
 
 declare(strict_types=1);
 
-namespace LongitudeOne\Spatial\ORM\Query\AST\Functions\MySql;
+namespace LongitudeOne\Spatial\ORM\Query\AST\Functions\MariaDB;
 
 use Doctrine\DBAL\Platforms\AbstractMySQLPlatform;
+use Doctrine\DBAL\Platforms\MariaDBPlatform;
 use LongitudeOne\Spatial\ORM\Query\AST\Functions\AbstractSpatialDQLFunction;
 
 /**
@@ -51,7 +52,7 @@ class SpBuffer extends AbstractSpatialDQLFunction
      */
     protected function getMaxParameter(): int
     {
-        return 3;
+        return 2;
     }
 
     /**
@@ -76,6 +77,6 @@ class SpBuffer extends AbstractSpatialDQLFunction
      */
     protected function getPlatforms(): array
     {
-    return [AbstractMySQLPlatform::class];
+    return [MariaDBPlatform::class];
     }
 }

@@ -18,7 +18,7 @@ declare(strict_types=1);
 
 namespace LongitudeOne\Spatial\Tests\DBAL\Types;
 
-use Doctrine\DBAL\Platforms\MySQLPlatform;
+use Doctrine\DBAL\Platforms\AbstractMySQLPlatform;
 use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
 use LongitudeOne\Spatial\Exception\InvalidValueException;
 use LongitudeOne\Spatial\PHP\Types\Geometry\GeometryInterface;
@@ -55,7 +55,7 @@ class GeometryTypeTest extends PersistOrmTestCase
     {
         $this->usesEntity(self::GEOMETRY_ENTITY);
         $this->usesEntity(self::NO_HINT_GEOMETRY_ENTITY);
-        $this->supportsPlatform(MySQLPlatform::class);
+        $this->supportsPlatform(AbstractMySQLPlatform::class);
         $this->supportsPlatform(PostgreSQLPlatform::class);
         parent::setUp();
     }

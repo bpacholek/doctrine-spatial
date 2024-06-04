@@ -18,7 +18,7 @@ declare(strict_types=1);
 
 namespace LongitudeOne\Spatial\Tests\ORM\Query\AST\Functions\Standard;
 
-use Doctrine\DBAL\Platforms\MySQLPlatform;
+use Doctrine\DBAL\Platforms\AbstractMySQLPlatform;
 use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
 use LongitudeOne\Spatial\Tests\Helper\PersistantLineStringHelperTrait;
 use LongitudeOne\Spatial\Tests\PersistOrmTestCase;
@@ -47,7 +47,7 @@ class StAsBinaryTest extends PersistOrmTestCase
     {
         $this->usesEntity(self::LINESTRING_ENTITY);
         $this->supportsPlatform(PostgreSQLPlatform::class);
-        $this->supportsPlatform(MySQLPlatform::class);
+        $this->supportsPlatform(AbstractMySQLPlatform::class);
 
         parent::setUp();
     }
@@ -74,7 +74,7 @@ class StAsBinaryTest extends PersistOrmTestCase
 
         static::assertIsArray($result);
 
-        if ($this->getPlatform() instanceof MySQLPlatform) {
+        if ($this->getPlatform() instanceof AbstractMySQLPlatform) {
             static::assertEquals(pack('H*', $expectedA), $result[0][1]);
             static::assertEquals(pack('H*', $expectedB), $result[1][1]);
         }

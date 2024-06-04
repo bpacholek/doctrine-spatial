@@ -16,38 +16,38 @@
 
 declare(strict_types=1);
 
-namespace LongitudeOne\Spatial\Tests\ORM\Query\AST\Functions\Standard;
+namespace LongitudeOne\Spatial\Tests\ORM\Query\AST\Functions\MariaDB;
 
-use Doctrine\DBAL\Platforms\AbstractMySQLPlatform;
-use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
-use LongitudeOne\Spatial\Tests\Helper\PersistantLineStringHelperTrait;
+use Doctrine\DBAL\Platforms\MariaDBPlatform;
+use LongitudeOne\Spatial\Tests\Helper\PersistantPointHelperTrait;
 use LongitudeOne\Spatial\Tests\PersistOrmTestCase;
 
 /**
- * ST_IsEmpty DQL function tests.
+ * SP_Buffer and SP_BufferStrategy DQL functions tests.
+ * The ST_Buffer and ST_BufferStrategy SQL functions are specific to MySQL.
+ * These tests verify their implementation in doctrine spatial.
  *
- * @author  Derek J. Lambert <dlambert@dereklambert.com>
  * @author  Alexandre Tranchant <alexandre.tranchant@gmail.com>
- * @license https://dlambert.mit-license.org MIT
+ * @license https://alexandre-tranchant.mit-license.org MIT
  *
  * @group dql
+ * @group mysql-only
  *
  * @internal
  *
  * @coversDefaultClass
  */
-class StIsEmptyTest extends PersistOrmTestCase
+class SpBufferTest extends PersistOrmTestCase
 {
-    use PersistantLineStringHelperTrait;
+    use PersistantPointHelperTrait;
 
     /**
      * Set up the function type test.
      */
     protected function setUp(): void
     {
-        $this->usesEntity(self::LINESTRING_ENTITY);
-        $this->supportsPlatform(PostgreSQLPlatform::class);
-        $this->supportsPlatform(AbstractMySQLPlatform::class);
+        $this->usesEntity(self::POINT_ENTITY);
+        $this->supportsPlatform(MariaDBPlatform::class);
 
         parent::setUp();
     }
@@ -57,21 +57,21 @@ class StIsEmptyTest extends PersistOrmTestCase
      *
      * @group geometry
      */
-    public function testFunction(): void
+    public function testSelectSpBuffer(): void
     {
-        $this->persistStraightLineString();
-        $this->persistAngularLineString();
+        $pointO = $this->persistPointO();
         $this->getEntityManager()->flush();
         $this->getEntityManager()->clear();
 
         $query = $this->getEntityManager()->createQuery(
-            'SELECT ST_IsEmpty(l.lineString) FROM LongitudeOne\Spatial\Tests\Fixtures\LineStringEntity l'
+            'SELECT p, ST_AsText(Mysql_Buffer(p.point, 4)), ST_WITHIN(Mysql_Buffer(p.point, 4), ST_GeomFromText(\'POLYGON((-4 -4,4 -4,4 4,-4 4,-4 -4))\')) FROM LongitudeOne\Spatial\Tests\Fixtures\PointEntity p'
         );
+
         $result = $query->getResult();
 
         static::assertIsArray($result);
-        static::assertIsArray($result[0]);
-        static::assertCount(1, $result[0]);
-        static::assertEquals(0, $result[0][1]);
+        static::assertCount(1, $result);
+        static::assertEquals($pointO, $result[0][0]);
+        static::assertEquals(1, $result[0][2]);
     }
 }

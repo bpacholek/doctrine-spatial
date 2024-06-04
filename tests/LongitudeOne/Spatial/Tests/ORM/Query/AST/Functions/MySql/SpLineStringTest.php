@@ -18,7 +18,7 @@ declare(strict_types=1);
 
 namespace LongitudeOne\Spatial\Tests\ORM\Query\AST\Functions\MySql;
 
-use Doctrine\DBAL\Platforms\MySQLPlatform;
+use Doctrine\DBAL\Platforms\AbstractMySQLPlatform;
 use LongitudeOne\Spatial\Tests\Helper\PersistantLineStringHelperTrait;
 use LongitudeOne\Spatial\Tests\PersistOrmTestCase;
 
@@ -45,7 +45,7 @@ class SpLineStringTest extends PersistOrmTestCase
     protected function setUp(): void
     {
         $this->usesEntity(self::LINESTRING_ENTITY);
-        $this->supportsPlatform(MySQLPlatform::class);
+        $this->supportsPlatform(AbstractMySQLPlatform::class);
 
         parent::setUp();
     }

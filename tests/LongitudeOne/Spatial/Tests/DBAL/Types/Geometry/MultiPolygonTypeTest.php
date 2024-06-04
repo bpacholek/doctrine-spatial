@@ -18,7 +18,7 @@ declare(strict_types=1);
 
 namespace LongitudeOne\Spatial\Tests\DBAL\Types\Geometry;
 
-use Doctrine\DBAL\Platforms\MySQLPlatform;
+use Doctrine\DBAL\Platforms\AbstractMySQLPlatform;
 use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
 use LongitudeOne\Spatial\Exception\InvalidValueException;
 use LongitudeOne\Spatial\PHP\Types\Geometry\LineString;
@@ -48,7 +48,7 @@ class MultiPolygonTypeTest extends PersistOrmTestCase
     protected function setUp(): void
     {
         $this->usesEntity(self::MULTIPOLYGON_ENTITY);
-        $this->supportsPlatform(MySQLPlatform::class);
+        $this->supportsPlatform(AbstractMySQLPlatform::class);
         $this->supportsPlatform(PostgreSQLPlatform::class);
         parent::setUp();
     }

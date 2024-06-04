@@ -18,7 +18,7 @@ declare(strict_types=1);
 
 namespace LongitudeOne\Spatial\ORM\Query\AST\Functions\MySql;
 
-use Doctrine\DBAL\Platforms\MySQLPlatform;
+use Doctrine\DBAL\Platforms\AbstractMySQLPlatform;
 use LongitudeOne\Spatial\ORM\Query\AST\Functions\AbstractSpatialDQLFunction;
 
 /**
@@ -73,6 +73,6 @@ class SpGeometryType extends AbstractSpatialDQLFunction
      */
     protected function getPlatforms(): array
     {
-        return [MySQLPlatform::class];
+        return [AbstractMySQLPlatform::class];
     }
 }

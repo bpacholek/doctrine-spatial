@@ -18,7 +18,7 @@ declare(strict_types=1);
 
 namespace LongitudeOne\Spatial\Tests\ORM\Query\AST\Functions\Standard;
 
-use Doctrine\DBAL\Platforms\MySQLPlatform;
+use Doctrine\DBAL\Platforms\AbstractMySQLPlatform;
 use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
 use LongitudeOne\Spatial\Tests\Helper\PersistantMultiPointHelperTrait;
 use LongitudeOne\Spatial\Tests\PersistOrmTestCase;
@@ -46,7 +46,7 @@ class StNumGeometriesTest extends PersistOrmTestCase
     {
         $this->usesEntity(self::MULTIPOINT_ENTITY);
         $this->supportsPlatform(PostgreSQLPlatform::class);
-        $this->supportsPlatform(MySQLPlatform::class);
+        $this->supportsPlatform(AbstractMySQLPlatform::class);
 
         parent::setUp();
     }

@@ -18,7 +18,7 @@ declare(strict_types=1);
 
 namespace LongitudeOne\Spatial\Tests\ORM\Query\AST\Functions\Standard;
 
-use Doctrine\DBAL\Platforms\MySQLPlatform;
+use Doctrine\DBAL\Platforms\AbstractMySQLPlatform;
 use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
 use LongitudeOne\Spatial\Tests\Helper\PersistantPolygonHelperTrait;
 use LongitudeOne\Spatial\Tests\PersistOrmTestCase;
@@ -46,7 +46,7 @@ class StOverlapsTest extends PersistOrmTestCase
     {
         $this->usesEntity(self::POLYGON_ENTITY);
         $this->supportsPlatform(PostgreSQLPlatform::class);
-        $this->supportsPlatform(MySQLPlatform::class);
+        $this->supportsPlatform(AbstractMySQLPlatform::class);
 
         parent::setUp();
     }
@@ -76,7 +76,7 @@ class StOverlapsTest extends PersistOrmTestCase
         static::assertEquals($bigPolygon, $result[0]);
         static::assertEquals($polygonW, $result[2]);
 
-        if ($this->getPlatform() instanceof MySQLPlatform) {
+        if ($this->getPlatform() instanceof AbstractMySQLPlatform) {
             static::markTestSkipped(
                 'MySQL does not respect the initial polygon and reconstructs it in a bad (direction) way'
             );

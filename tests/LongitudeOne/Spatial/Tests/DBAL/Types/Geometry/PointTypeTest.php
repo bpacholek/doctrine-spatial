@@ -18,7 +18,7 @@ declare(strict_types=1);
 
 namespace LongitudeOne\Spatial\Tests\DBAL\Types\Geometry;
 
-use Doctrine\DBAL\Platforms\MySQLPlatform;
+use Doctrine\DBAL\Platforms\AbstractMySQLPlatform;
 use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
 use LongitudeOne\Spatial\Tests\Fixtures\PointEntity;
 use LongitudeOne\Spatial\Tests\Helper\PersistantPointHelperTrait;
@@ -46,7 +46,7 @@ class PointTypeTest extends PersistOrmTestCase
     protected function setUp(): void
     {
         $this->usesEntity(self::POINT_ENTITY);
-        $this->supportsPlatform(MySQLPlatform::class);
+        $this->supportsPlatform(AbstractMySQLPlatform::class);
         $this->supportsPlatform(PostgreSQLPlatform::class);
         parent::setUp();
     }

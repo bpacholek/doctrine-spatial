@@ -18,7 +18,7 @@ declare(strict_types=1);
 
 namespace LongitudeOne\Spatial\Tests\ORM\Query\AST\Functions\Standard;
 
-use Doctrine\DBAL\Platforms\MySQLPlatform;
+use Doctrine\DBAL\Platforms\AbstractMySQLPlatform;
 use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
 use LongitudeOne\Spatial\Tests\Helper\PersistantLineStringHelperTrait;
 use LongitudeOne\Spatial\Tests\PersistOrmTestCase;
@@ -46,7 +46,7 @@ class StSymDifferenceTest extends PersistOrmTestCase
     {
         $this->usesEntity(self::LINESTRING_ENTITY);
         $this->supportsPlatform(PostgreSQLPlatform::class);
-        $this->supportsPlatform(MySQLPlatform::class);
+        $this->supportsPlatform(AbstractMySQLPlatform::class);
 
         parent::setUp();
     }
@@ -81,7 +81,7 @@ class StSymDifferenceTest extends PersistOrmTestCase
         // MySQL failed ST_SymDifference implementation. A linestring minus another one should cut the line.
         // The result SHALL be a multilinestring with two lineStrings.
         $expected = 'MULTILINESTRING((0 0,6 6),(0 10,6 6),(6 6,12 12),(6 6,15 0))';
-        if ($this->getPlatform() instanceof MySQLPlatform) {
+        if ($this->getPlatform() instanceof AbstractMySQLPlatform) {
             $expected = 'MULTILINESTRING((0 0,12 12),(0 10,15 0))';
         }
 

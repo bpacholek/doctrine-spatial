@@ -18,7 +18,8 @@ declare(strict_types=1);
 
 namespace LongitudeOne\Spatial\Tests\ORM\Query\AST\Functions\Standard;
 
-use Doctrine\DBAL\Platforms\MySQLPlatform;
+use Doctrine\DBAL\Platforms\AbstractMySQLPlatform;
+use Doctrine\DBAL\Platforms\MariaDBPlatform;
 use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
 use LongitudeOne\Spatial\Tests\Helper\PersistantLineStringHelperTrait;
 use LongitudeOne\Spatial\Tests\PersistOrmTestCase;
@@ -46,7 +47,7 @@ class StDifferenceTest extends PersistOrmTestCase
     {
         $this->usesEntity(self::LINESTRING_ENTITY);
         $this->supportsPlatform(PostgreSQLPlatform::class);
-        $this->supportsPlatform(MySQLPlatform::class);
+        $this->supportsPlatform(AbstractMySQLPlatform::class);
 
         parent::setUp();
     }
@@ -80,7 +81,7 @@ class StDifferenceTest extends PersistOrmTestCase
         // Here is the only good result one.
         // A linestring minus another crossing linestring returns initial linestring split
         $expected = 'MULTILINESTRING((0 0,6 6),(6 6,12 12))';
-        if ($this->getPlatform() instanceof MySQLPlatform) {
+        if ($this->getPlatform() instanceof AbstractMySQLPlatform) {
             // MySQL failed ST_Difference implementation, so I test the bad result.
             $expected = 'LINESTRING(0 0,12 12)';
         }
@@ -102,14 +103,16 @@ class StDifferenceTest extends PersistOrmTestCase
         $this->getEntityManager()->flush();
         $this->getEntityManager()->clear();
 
-        $query = $this->getEntityManager()->createQuery(
-            'SELECT l FROM LongitudeOne\Spatial\Tests\Fixtures\LineStringEntity l WHERE ST_IsEmpty(ST_Difference(ST_GeomFromText(:p1), l.lineString)) = false'
-        );
+        $dql = 'SELECT l FROM LongitudeOne\Spatial\Tests\Fixtures\LineStringEntity l WHERE ST_IsEmpty(ST_Difference(ST_GeomFromText(:p1), l.lineString)) = false';
+        if ($this->getPlatform() instanceof MariaDBPlatform) {
+            $dql = 'SELECT l FROM LongitudeOne\Spatial\Tests\Fixtures\LineStringEntity l WHERE ST_IsEmpty(ST_AsBinary(ST_Difference(ST_GeomFromText(:p1), l.lineString))) = false';
+        }
+
+        $query = $this->getEntityManager()->createQuery($dql);
 
         $query->setParameter('p1', 'LINESTRING(0 0, 10 10)', 'string');
 
         $result = $query->getResult();
-
         static::assertIsArray($result);
         static::assertCount(2, $result);
         static::assertEquals($lineStringB, $result[0]);

@@ -18,7 +18,7 @@ declare(strict_types=1);
 
 namespace LongitudeOne\Spatial\Tests\ORM\Query\AST\Functions\Standard;
 
-use Doctrine\DBAL\Platforms\MySQLPlatform;
+use Doctrine\DBAL\Platforms\AbstractMySQLPlatform;
 use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
 use LongitudeOne\Spatial\Tests\Helper\PersistantLineStringHelperTrait;
 use LongitudeOne\Spatial\Tests\Helper\PersistantPointHelperTrait;
@@ -49,7 +49,7 @@ class StSridTest extends PersistOrmTestCase
         $this->usesEntity(self::POINT_ENTITY);
         $this->usesEntity(self::GEOGRAPHY_ENTITY);
         $this->supportsPlatform(PostgreSQLPlatform::class);
-        $this->supportsPlatform(MySQLPlatform::class);
+        $this->supportsPlatform(AbstractMySQLPlatform::class);
 
         parent::setUp();
     }
@@ -70,7 +70,7 @@ class StSridTest extends PersistOrmTestCase
 
         static::assertIsArray($result);
         static::assertCount(1, $result);
-        if ($this->getPlatform() instanceof MySQLPlatform) {
+        if ($this->getPlatform() instanceof AbstractMySQLPlatform) {
             // TODO MySQL is returning 0 insteadof 4326
             static::markTestSkipped('SRID not implemented in Abstraction of MySQL');
         }
@@ -96,7 +96,7 @@ class StSridTest extends PersistOrmTestCase
         static::assertIsArray($result);
         static::assertIsArray($result[0]);
         static::assertCount(1, $result[0]);
-        if ($this->getPlatform() instanceof MySQLPlatform) {
+        if ($this->getPlatform() instanceof AbstractMySQLPlatform) {
             // MySQL is returning 0 insteadof 2154
             static::markTestSkipped('SRID not implemented in Abstraction of MySQL');
         }
